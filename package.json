@@ -1,0 +1,35 @@
+{
+  "name": "cordova-plugin-contacts-x",
+  "version": "1.0.0",
+  "description": "Cordova Plugins for managing contacts",
+  "cordova": {
+    "id": "cordova-plugin-contacts-x",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EinfachHans/cordova-plugin-contacts-x.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "contacts",
+    "contacts-x",
+    "contactsx"
+  ],
+  "author": "EinfachHans",
+  "license": "MIT",
+  "main": "./src/typescript/index.js",
+  "types": "./src/typescript/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/EinfachHans/cordova-plugin-contacts-x/issues"
+  },
+  "scripts": {
+    "doctoc": "doctoc readme.md --github --title '**Table of Content**' --maxlevel 2"
+  },
+  "homepage": "https://github.com/EinfachHans/cordova-plugin-contacts-x#readme"
+}
