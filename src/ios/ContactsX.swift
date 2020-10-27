@@ -12,6 +12,7 @@ import Contacts
     @objc(find:)
     func find(command: CDVInvokedUrlCommand) {
         _callbackId = command.callbackId;
+        let options = ContactsXOptions(options: command.argument(at: 0) as? NSDictionary);
 
         self.commandDelegate.run {
             let store = CNContactStore();
@@ -21,17 +22,14 @@ import Contacts
                     return;
                 }
                 var contacts = [ContactX]()
-                let keysToFetch = [CNContactGivenNameKey,
-                                   CNContactMiddleNameKey,
-                                   CNContactFamilyNameKey,
-                                   CNContactPhoneNumbersKey]
+                let keysToFetch = self.getKeysToFetch(options: options)
                 let request = CNContactFetchRequest(keysToFetch: keysToFetch as [NSString])
 
                     do {
                         try store.enumerateContacts(with: request) {
                             (contact, stop) in
                             // Array containing all unified contacts from everywhere
-                            contacts.append(ContactX(contact: contact))
+                            contacts.append(ContactX(contact: contact, options: options))
                         }
                     }
                     catch let error {
@@ -47,6 +45,26 @@ import Contacts
                 self.commandDelegate.send(result, callbackId: self._callbackId)
             }
         }
+    }
+
+    private func getKeysToFetch(options: ContactsXOptions) -> [String] {
+        var keysToFetch: [String] = [];
+        if(options.firstName) {
+            keysToFetch.append(CNContactGivenNameKey);
+        }
+        if(options.middleName) {
+            keysToFetch.append(CNContactMiddleNameKey);
+        }
+        if(options.familyName) {
+            keysToFetch.append(CNContactFamilyNameKey);
+        }
+        if(options.phoneNumbers) {
+            keysToFetch.append(CNContactPhoneNumbersKey);
+        }
+        if(options.emails) {
+            keysToFetch.append(CNContactEmailAddressesKey);
+        }
+        return keysToFetch;
     }
 
     @objc(hasPermission:)

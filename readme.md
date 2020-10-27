@@ -32,6 +32,8 @@ Please consider donating if you're using this plugin in an app that makes you mo
   - [hasPermission](#haspermission)
   - [requestPermission](#requestpermission)
   - [find](#find)
+- [Objects](#objects)
+  - [ContactXEmail](#contactxemail)
 - [Changelog](#changelog)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -43,6 +45,7 @@ Please consider donating if you're using this plugin in an app that makes you mo
 - **cordova** `>= 9.0.0`
 - **cordova-android** `>= 9.0.0`
 - **ios** `>= 9`
+- **android** `>= 22`
 
 ## Android
 
@@ -151,12 +154,20 @@ Same SuccessType as **hasPermission()**
 
 ## find
 
-Find Contacts
+Find Contacts by given options. If you don't set a field to true, it is not included or empty in the result
 
 ### Parameters:
 
 - Success Callback
 - Error Callback
+- Options:
+    - fields:
+        - displayName (boolean) - *Android only, default: true*
+        - firstName (boolean) - *default: true*
+        - middleName (boolean) - *default: true*
+        - familyName (boolean) - *default: true*
+        - phoneNumbers (boolean)
+        - emails (boolean)
 
 ```js
 window.ContactsX.find(function(success) {
@@ -175,6 +186,14 @@ This Method returns an Array of Contacts with the following fields:
 - middleName (string)
 - familyName (string)
 - phoneNumbers (string[])
+- emails ([ContactXEmail](#contactxemail)[])
+
+# Objects
+
+## ContactXEmail
+- id (string)
+- type (string)
+- value (string)
 
 # Changelog
 

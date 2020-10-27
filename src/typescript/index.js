@@ -7,7 +7,7 @@ var ContactsX = /** @class */ (function () {
 
   ContactsX.ErrorCodes = plugin().ErrorCodes;
 
-  ContactsX.find = function (success, failure) {
+  ContactsX.find = function (success, failure, options) {
     var plu = plugin();
     return plu.find.apply(plu, arguments);
   };

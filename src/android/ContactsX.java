@@ -13,7 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -34,7 +36,7 @@ public class ContactsX extends CordovaPlugin {
         try {
             if (action.equals("find")) {
                 if (PermissionHelper.hasPermission(this, READ)) {
-                    this.find();
+                    this.find(args);
                 } else {
                     returnError(ContactsXErrorCodes.PermissionDenied);
                 }
@@ -59,38 +61,36 @@ public class ContactsX extends CordovaPlugin {
         this.hasPermission();
     }
 
-    private void find() throws JSONException {
+    private void find(JSONArray args) throws JSONException {
+        ContactsXFindOptions options = new ContactsXFindOptions(args.optJSONObject(0));
+
         this.cordova.getThreadPool().execute(() -> {
 
             ContentResolver contentResolver = this.cordova.getContext().getContentResolver();
 
-            String[] projection = new String[]{
-                    ContactsContract.Data.MIMETYPE,
-                    ContactsContract.Contacts._ID,
-                    ContactsContract.Data.CONTACT_ID,
-                    ContactsContract.Contacts.DISPLAY_NAME,
-                    ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
-                    ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME,
-                    ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME,
-                    ContactsContract.CommonDataKinds.Contactables.DATA,
-            };
-            String selection = ContactsContract.Data.MIMETYPE + " in (?, ?)";
-            String[] selectionArgs = new String[]{
-                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
-                    ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
-            };
+            ArrayList<String> projection = this.getProjection(options);
+            ArrayList<String> selectionArgs = this.getSelectionArgs(options);
+            StringBuilder questionMarks = new StringBuilder();
+            for (String s : selectionArgs) {
+                if (selectionArgs.indexOf(s) == selectionArgs.size() - 1) {
+                    questionMarks.append("?");
+                } else {
+                    questionMarks.append("?, ");
+                }
+            }
+            String selection = ContactsContract.Data.MIMETYPE + " in (" + questionMarks.toString() + ")";
 
             Cursor contactsCursor = contentResolver.query(
                     ContactsContract.Data.CONTENT_URI,
-                    projection,
+                    projection.toArray(new String[0]),
                     selection,
-                    selectionArgs,
+                    selectionArgs.toArray(new String[0]),
                     null
             );
 
             JSONArray result = null;
             try {
-                result = handleFindResult(contactsCursor);
+                result = handleFindResult(contactsCursor, options);
             } catch (JSONException e) {
                 this.returnError(ContactsXErrorCodes.UnknownError, e.getMessage());
             }
@@ -103,7 +103,51 @@ public class ContactsX extends CordovaPlugin {
         });
     }
 
-    private JSONArray handleFindResult(Cursor contactsCursor) throws JSONException {
+    private ArrayList<String> getProjection(ContactsXFindOptions options) {
+        ArrayList<String> projection = new ArrayList<>();
+        projection.add(ContactsContract.Data.MIMETYPE);
+        projection.add(ContactsContract.Contacts._ID);
+        projection.add(ContactsContract.Data.CONTACT_ID);
+        projection.add(ContactsContract.CommonDataKinds.Contactables.DATA);
+
+        if (options.displayName) {
+            projection.add(ContactsContract.Contacts.DISPLAY_NAME);
+        }
+        if (options.firstName) {
+            projection.add(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+        }
+        if (options.middleName) {
+            projection.add(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME);
+        }
+        if (options.familyName) {
+            projection.add(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
+        }
+        if(options.emails) {
+            projection.add(ContactsContract.CommonDataKinds.Email._ID);
+            projection.add(ContactsContract.CommonDataKinds.Email.DATA);
+            projection.add(ContactsContract.CommonDataKinds.Email.TYPE);
+            projection.add(ContactsContract.CommonDataKinds.Email.LABEL);
+        }
+
+        return projection;
+    }
+
+    private ArrayList<String> getSelectionArgs(ContactsXFindOptions options) {
+        ArrayList<String> selectionArgs = new ArrayList<>();
+        if (options.phoneNumbers) {
+            selectionArgs.add(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+        }
+        if (options.emails) {
+            selectionArgs.add(ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE);
+        }
+        if (options.firstName || options.middleName || options.familyName) {
+            selectionArgs.add(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+        }
+
+        return selectionArgs;
+    }
+
+    private JSONArray handleFindResult(Cursor contactsCursor, ContactsXFindOptions options) throws JSONException {
         // initialize array
         JSONArray jsContacts = new JSONArray();
 
@@ -122,10 +166,15 @@ public class ContactsX extends CordovaPlugin {
                     // so put it to the HashMap
 
                     jsContact.put("id", contactId);
-                    String displayName = contactsCursor.getString(contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                    jsContact.put("displayName", displayName);
+                    if (options.displayName) {
+                        String displayName = contactsCursor.getString(contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        jsContact.put("displayName", displayName);
+                    }
                     JSONArray jsPhoneNumbers = new JSONArray();
                     jsContact.put("phoneNumbers", jsPhoneNumbers);
+
+                    JSONArray jsEmails = new JSONArray();
+                    jsContact.put("emails", jsEmails);
 
                     jsContacts.put(jsContact);
                 } else {
@@ -145,14 +194,24 @@ public class ContactsX extends CordovaPlugin {
                         JSONArray jsPhoneNumbers = jsContact.getJSONArray("phoneNumbers");
                         jsPhoneNumbers.put(data);
                         break;
+                    case ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE:
+                        JSONArray emailAddresses = jsContact.getJSONArray("emails");
+                        emailAddresses.put(emailQuery(contactsCursor));
+                        break;
                     case ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE:
                         try {
-                            String firstName = contactsCursor.getString(contactsCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
-                            String middleName = contactsCursor.getString(contactsCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME));
-                            String familyName = contactsCursor.getString(contactsCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
-                            jsContact.put("firstName", firstName);
-                            jsContact.put("middleName", middleName);
-                            jsContact.put("familyName", familyName);
+                            if (options.firstName) {
+                                String firstName = contactsCursor.getString(contactsCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
+                                jsContact.put("firstName", firstName);
+                            }
+                            if (options.middleName) {
+                                String middleName = contactsCursor.getString(contactsCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME));
+                                jsContact.put("middleName", middleName);
+                            }
+                            if (options.familyName) {
+                                String familyName = contactsCursor.getString(contactsCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
+                                jsContact.put("familyName", familyName);
+                            }
                         } catch (IllegalArgumentException ignored) {
                         }
                         break;
@@ -162,6 +221,69 @@ public class ContactsX extends CordovaPlugin {
             }
         }
         return jsContacts;
+    }
+
+    private JSONObject emailQuery(Cursor cursor) throws JSONException {
+        JSONObject email = new JSONObject();
+        int typeCode = cursor.getInt(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.TYPE));
+        String typeLabel = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.LABEL));
+        String type = (typeCode == ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM) ? typeLabel : getContactType(typeCode);
+        email.put("id", cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email._ID)));
+        email.put("value", cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.DATA)));
+        email.put("type", type);
+        return email;
+    }
+
+    /**
+     * Converts a string from the W3C Contact API to it's Android int value.
+     */
+    private int getContactType(String string) {
+        int type = ContactsContract.CommonDataKinds.Email.TYPE_OTHER;
+        if (string != null) {
+
+            String lowerType = string.toLowerCase(Locale.getDefault());
+
+            if ("home".equals(lowerType)) {
+                return ContactsContract.CommonDataKinds.Email.TYPE_HOME;
+            }
+            else if ("work".equals(lowerType)) {
+                return ContactsContract.CommonDataKinds.Email.TYPE_WORK;
+            }
+            else if ("other".equals(lowerType)) {
+                return ContactsContract.CommonDataKinds.Email.TYPE_OTHER;
+            }
+            else if ("mobile".equals(lowerType)) {
+                return ContactsContract.CommonDataKinds.Email.TYPE_MOBILE;
+            }
+            return ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM;
+        }
+        return type;
+    }
+
+    /**
+     * getPhoneType converts an Android phone type into a string
+     */
+    private String getContactType(int type) {
+        String stringType;
+        switch (type) {
+            case ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM:
+                stringType = "custom";
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_HOME:
+                stringType = "home";
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_WORK:
+                stringType = "work";
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_MOBILE:
+                stringType = "mobile";
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_OTHER:
+            default:
+                stringType = "other";
+                break;
+        }
+        return stringType;
     }
 
     private void hasPermission() throws JSONException {

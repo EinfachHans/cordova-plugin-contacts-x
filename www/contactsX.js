@@ -8,8 +8,8 @@ var contactsX = {
     UnknownError: 10
   },
 
-  find: function (success, error) {
-    exec(success, error, 'ContactsX', 'find', []);
+  find: function (success, error, options) {
+    exec(success, error, 'ContactsX', 'find', [options]);
   },
 
   hasPermission: function (success, error) {

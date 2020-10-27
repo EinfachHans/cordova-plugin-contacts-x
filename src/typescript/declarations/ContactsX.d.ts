@@ -1,4 +1,5 @@
 /// <reference path="./interfaces/error.d.ts" />
+/// <reference path="./interfaces/find-options.d.ts" />
 /// <reference path="./interfaces/permission-result.d.ts" />
 /// <reference path="./interfaces/ContactX.d.ts" />
 
@@ -18,8 +19,9 @@ declare module 'cordova-plugin-contacts-x' {
      *
      * @param success
      * @param error
+     * @param options
      */
-    static find(success: (result: ContactX[]) => void, error: (error: ContactXError) => void);
+    static find(success: (result: ContactX[]) => void, error: (error: ContactXError) => void, options?: FindOptions);
 
     /**
      * Check permission is available

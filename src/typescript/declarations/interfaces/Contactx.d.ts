@@ -1,5 +1,19 @@
 declare module 'cordova-plugin-contacts-x' {
 
+  interface ContactXEmail {
+    id: string;
+
+    /**
+     * type of the mail
+     */
+    type: string;
+
+    /**
+     * the mail itself
+     */
+    value: string;
+  }
+
   interface ContactX {
     id: string;
 
@@ -28,5 +42,10 @@ declare module 'cordova-plugin-contacts-x' {
      * unformatted phone-numbers of the contact
      */
     phoneNumbers: string[];
+
+    /**
+     * unformatted emails of the contact
+     */
+    emails: ContactXEmail[];
   }
 }

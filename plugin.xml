@@ -24,6 +24,7 @@
 
         <source-file src="src/android/ContactsX.java" target-dir="src/de/einfachhans/ContactsX"/>
         <source-file src="src/android/ContactsXErrorCodes.java" target-dir="src/de/einfachhans/ContactsX"/>
+        <source-file src="src/android/ContactsXFindOptions.java" target-dir="src/de/einfachhans/ContactsX"/>
     </platform>
     <platform name="ios">
         <config-file parent="/*" target="config.xml">
@@ -34,6 +35,7 @@
         <header-file src="src/ios/ContactsX-Bridging-Header.h" />
         <source-file src="src/ios/ContactsX.swift"  />
         <source-file src="src/ios/ContactX.swift"  />
+        <source-file src="src/ios/ContactsXOptions.swift"  />
 
         <config-file target="*-Info.plist" parent="NSContactsUsageDescription">
             <string>This app requires access to the contacts to manage them.</string>
