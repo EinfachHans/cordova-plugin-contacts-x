@@ -1,5 +1,5 @@
 # ContactsX Cordova Plugin
-![Maintenance](https://img.shields.io/maintenance/yes/2020)
+![Maintenance](https://img.shields.io/maintenance/yes/2021)
 [![npm version](https://badge.fury.io/js/cordova-plugin-contacts-x.svg)](https://badge.fury.io/js/cordova-plugin-contacts-x)
 
 This [Cordova](https://cordova.apache.org) Plugin is for managing Contacts. Why use this Plugin and not the ["Official" one](https://github.com/apache/cordova-plugin-contacts).
