@@ -12,6 +12,10 @@ var contactsX = {
     exec(success, error, 'ContactsX', 'find', [options]);
   },
 
+  pick: function (success, error) {
+    exec(success, error, 'ContactsX', 'pick', []);
+  },
+
   hasPermission: function (success, error) {
     exec(success, error, 'ContactsX', 'hasPermission', []);
   },

@@ -12,6 +12,11 @@ var ContactsX = /** @class */ (function () {
     return plu.find.apply(plu, arguments);
   };
 
+  ContactsX.pick = function (success, failure) {
+    var plu = plugin();
+    return plu.pick.apply(plu, arguments);
+  };
+
   ContactsX.hasPermission = function (success, failure) {
     var plu = plugin();
     return plu.hasPermission.apply(plu, arguments);

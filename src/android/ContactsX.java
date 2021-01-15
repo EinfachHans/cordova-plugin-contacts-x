@@ -1,7 +1,9 @@
 package de.einfachhans.ContactsX;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
@@ -28,6 +30,7 @@ public class ContactsX extends CordovaPlugin {
     public static final String READ = Manifest.permission.READ_CONTACTS;
 
     public static final int REQ_CODE_READ = 0;
+    public static final int REQ_CODE_PICK = 2;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
@@ -37,6 +40,12 @@ public class ContactsX extends CordovaPlugin {
             if (action.equals("find")) {
                 if (PermissionHelper.hasPermission(this, READ)) {
                     this.find(args);
+                } else {
+                    returnError(ContactsXErrorCodes.PermissionDenied);
+                }
+            } else if(action.equals("pick")) {
+                if (PermissionHelper.hasPermission(this, READ)) {
+                    this.pick(args);
                 } else {
                     returnError(ContactsXErrorCodes.PermissionDenied);
                 }
@@ -54,6 +63,32 @@ public class ContactsX extends CordovaPlugin {
         }
 
         return true;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, final Intent intent) {
+        if(requestCode == REQ_CODE_PICK) {
+            if(resultCode == Activity.RESULT_OK) {
+                String contactId = intent.getData().getLastPathSegment();
+                Cursor c =  this.cordova.getActivity().getContentResolver().query(ContactsContract.RawContacts.CONTENT_URI,
+                        new String[] {ContactsContract.RawContacts._ID}, ContactsContract.RawContacts.CONTACT_ID + " = " + contactId, null, null);
+                if (!c.moveToFirst()) {
+                    returnError(ContactsXErrorCodes.UnknownError, "Error occurred while retrieving contact raw id");
+                    return;
+                }
+                String id = c.getString(c.getColumnIndex(ContactsContract.RawContacts._ID));
+                c.close();
+
+                JSONObject contact = getContactById(id);
+                if(contact != null) {
+                    this._callbackContext.success(contact);
+                } else {
+                    returnError(ContactsXErrorCodes.UnknownError);
+                }
+            } else {
+                returnError(ContactsXErrorCodes.UnknownError);
+
+            }
+        }
     }
 
     public void onRequestPermissionResult(int requestCode, String[] permissions,
@@ -93,10 +128,6 @@ public class ContactsX extends CordovaPlugin {
                 result = handleFindResult(contactsCursor, options);
             } catch (JSONException e) {
                 this.returnError(ContactsXErrorCodes.UnknownError, e.getMessage());
-            }
-
-            if (contactsCursor != null) {
-                contactsCursor.close();
             }
 
             this._callbackContext.success(result);
@@ -219,7 +250,10 @@ public class ContactsX extends CordovaPlugin {
 
                 contactsById.put(contactId, jsContact);
             }
+
+            contactsCursor.close();
         }
+
         return jsContacts;
     }
 
@@ -284,6 +318,39 @@ public class ContactsX extends CordovaPlugin {
                 break;
         }
         return stringType;
+    }
+
+    private void pick(JSONArray args) {
+        this.cordova.getThreadPool().execute(() -> {
+            Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            this.cordova.startActivityForResult(this, contactPickerIntent, REQ_CODE_PICK);
+        });
+    }
+
+    private JSONObject getContactById(String id) {
+        Cursor c = this.cordova.getActivity().getContentResolver().query(
+                ContactsContract.Data.CONTENT_URI,
+                null,
+                ContactsContract.Data.RAW_CONTACT_ID + " = ? ",
+                new String[]{id},
+                ContactsContract.Data.RAW_CONTACT_ID + " ASC");
+
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("phoneNumbers", true);
+        fields.put("emails", true);
+        Map<String, Object> pickFields = new HashMap<>();
+        pickFields.put("fields", fields);
+
+        try {
+            JSONArray contacts = handleFindResult(c, new ContactsXFindOptions(new JSONObject(pickFields)));
+            if(contacts.length() == 1) {
+                return contacts.getJSONObject(0);
+            }
+        } catch (Exception e) {
+            returnError(ContactsXErrorCodes.UnknownError, e.getMessage());
+        }
+
+        return null;
     }
 
     private void hasPermission() throws JSONException {

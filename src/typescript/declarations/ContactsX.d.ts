@@ -24,6 +24,14 @@ declare module 'cordova-plugin-contacts-x' {
     static find(success: (result: ContactX[]) => void, error: (error: ContactXError) => void, options?: FindOptions);
 
     /**
+     * Open a contact picker
+     *
+     * @param success
+     * @param error
+     */
+    static pick(success: (result: ContactX) => void, error: (error: ContactXError) => void);
+
+    /**
      * Check permission is available
      *
      * @param success
