@@ -1,6 +1,7 @@
 import Contacts
+import ContactsUI
 
-@objc(ContactsX) class ContactsX : CDVPlugin {
+@objc(ContactsX) class ContactsX : CDVPlugin, CNContactPickerDelegate {
 
     var _callbackId: String?
 
@@ -65,6 +66,32 @@ import Contacts
             keysToFetch.append(CNContactEmailAddressesKey);
         }
         return keysToFetch;
+    }
+    
+    @objc(pick:)
+    func pick(command: CDVInvokedUrlCommand) {
+        _callbackId = command.callbackId;
+        
+        self.hasPermission { (granted) in
+            guard granted else {
+                self.returnError(error: ErrorCodes.PermissionDenied);
+                return;
+            }
+            let contactPicker = CNContactPickerViewController();
+            contactPicker.delegate = self;
+            self.viewController.present(contactPicker, animated: true, completion: nil)
+        }
+    }
+    
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        let fields: NSDictionary = [
+            "phoneNumbers": true,
+            "emails": true
+        ];
+        let options = ContactsXOptions(options: ["fields": fields]);
+        let contactResult = ContactX(contact: contact, options: options).getJson() as! [String : Any];
+        let result: CDVPluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: contactResult);
+        self.commandDelegate.send(result, callbackId: self._callbackId);
     }
 
     @objc(hasPermission:)
