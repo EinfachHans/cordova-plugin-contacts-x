@@ -1,5 +1,8 @@
 # Changelog
 
+## unreleased
+- `pick` Method added
+
 ## 1.1.0
 - Fields can be specified (**Breaking**: phoneNumbers disabled by default)
 - emails field added 

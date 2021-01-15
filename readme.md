@@ -32,7 +32,9 @@ Please consider donating if you're using this plugin in an app that makes you mo
   - [hasPermission](#haspermission)
   - [requestPermission](#requestpermission)
   - [find](#find)
+  - [pick](#pick)
 - [Objects](#objects)
+  - [ContactX](#contactx)
   - [ContactXEmail](#contactxemail)
 - [Changelog](#changelog)
 
@@ -174,12 +176,41 @@ window.ContactsX.find(function(success) {
   console.log(success);
 }, function (error) {
   console.error(error);
+}, {
+  fields: {
+    phoneNumbers: true
+  }
 });
 ```
+
 ### SuccessType:
 
-This Method returns an Array of Contacts with the following fields:
+This Method returns an Array of [ContactX](#contactx).
 
+## pick
+
+Launches the Contact Picker to select a single contact. Currently, all available fields are returned.
+
+### Parameters:
+
+- Success Callback
+- Error Callback
+
+```js
+window.ContactsX.pick(function(success) {
+  console.log(success);
+}, function (error) {
+  console.error(error);
+});
+```
+
+### SuccessType:
+
+This Method returns a single [ContactX](#contactx) object.
+
+# Objects
+
+## ContactX
 - id (string) - a unique identifier
 - displayName (string) - *Android only*
 - firstName (string)
@@ -187,8 +218,6 @@ This Method returns an Array of Contacts with the following fields:
 - familyName (string)
 - phoneNumbers (string[])
 - emails ([ContactXEmail](#contactxemail)[])
-
-# Objects
 
 ## ContactXEmail
 - id (string)
