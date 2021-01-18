@@ -5,6 +5,11 @@ declare module 'cordova-plugin-contacts-x' {
      * Does have read Permission?
      */
     read: boolean;
+
+    /**
+     * Does have write Permission?
+     */
+    write: boolean;
   }
 
 }

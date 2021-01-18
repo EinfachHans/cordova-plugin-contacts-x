@@ -31,10 +31,14 @@ Please consider donating if you're using this plugin in an app that makes you mo
 - [Api](#api)
   - [hasPermission](#haspermission)
   - [requestPermission](#requestpermission)
+  - [requestWritePermission](#requestwritepermission)
   - [find](#find)
   - [pick](#pick)
+  - [save](#save)
+  - [delete](#delete)
 - [Objects](#objects)
   - [ContactX](#contactx)
+  - [ContactXPhoneNumber](#contactxphonenumber)
   - [ContactXEmail](#contactxemail)
 - [Changelog](#changelog)
 
@@ -127,11 +131,11 @@ window.ContactsX.hasPermission(function(success) {
 This Method returns an Object with the following field:
 
 - read (boolean) has read permission
+- write (boolean) has write permission
 
 ### Quirks
 
-The plan is to be able to add a write Permission in future, when i add more features. Apple only has one Permission, so in iOS
-read (and in future write) will be the same value.
+Apple only has one Permission, so in iOS read and write are always the same value.
 
 ## requestPermission
 
@@ -144,6 +148,27 @@ Request Contact Permission
 
 ```js
 window.ContactsX.requestPermission(function(success) {
+  console.log(success);
+}, function (error) {
+  console.error(error);
+});
+```
+
+### SuccessType:
+
+Same SuccessType as **hasPermission()**
+
+## requestWritePermission
+
+Request Contact Write Permission (android only)
+
+### Parameters:
+
+- Success Callback
+- Error Callback
+
+```js
+window.ContactsX.requestWritePermission(function(success) {
   console.log(success);
 }, function (error) {
   console.error(error);
@@ -208,6 +233,58 @@ window.ContactsX.pick(function(success) {
 
 This Method returns a single [ContactX](#contactx) object.
 
+## save
+
+Save or update a contact. If you provide the `id` the contact will be updated. (remember to add `rawId` on android also).
+
+### Parameters:
+
+- contact ([ContactX](#contactx))
+- Success Callback
+- Error Callback
+
+```js
+window.ContactsX.save(
+  {
+    firstName: "Hans",
+    familyName: "Test",
+    phoneNumebers: [{
+      type: "mobile",
+      value: "110"
+    }]
+  },
+  function(success) {
+    console.log(success);
+  },
+  function (error) {
+  console.error(error);
+});
+```
+
+### SuccessType:
+
+This Method returns the final [ContactX](#contactx) object.
+
+## delete
+
+Delete a contact by id
+
+### Parameters:
+
+- id (string)
+- Success Callback
+- Error Callback
+
+```js
+window.ContactsX.delete("some_id",
+  function(success) {
+    console.log(success);
+  },
+  function (error) {
+  console.error(error);
+});
+```
+
 # Objects
 
 ## ContactX
@@ -216,8 +293,13 @@ This Method returns a single [ContactX](#contactx) object.
 - firstName (string)
 - middleName (string)
 - familyName (string)
-- phoneNumbers (string[])
+- phoneNumbers ([ContactXPhoneNumber](contactxphonenumber)[])
 - emails ([ContactXEmail](#contactxemail)[])
+
+## ContactXPhoneNumber
+- id (string)
+- type (string)
+- value (string)
 
 ## ContactXEmail
 - id (string)

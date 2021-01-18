@@ -1,7 +1,21 @@
 declare module 'cordova-plugin-contacts-x' {
 
+  interface ContactXPhoneNumber {
+    id?: string;
+
+    /**
+     * type of the phoneNumber
+     */
+    type: string;
+
+    /**
+     * the phoneNumber itself
+     */
+    value: string;
+  }
+
   interface ContactXEmail {
-    id: string;
+    id?: string;
 
     /**
      * type of the mail
@@ -15,37 +29,37 @@ declare module 'cordova-plugin-contacts-x' {
   }
 
   interface ContactX {
-    id: string;
+    id?: string;
+    rawId?: string;
 
     /**
      * android only
      */
-    displayName: string;
+    displayName?: string;
 
     /**
      * first name (given name) of the contact
      */
-    firstName: string;
+    firstName?: string;
 
     /**
      * middle name of the contact
      */
-    middleName: string;
+    middleName?: string;
 
     /**
      * family name of the contact
      */
-    familyName: string;
-
+    familyName?: string;
 
     /**
      * unformatted phone-numbers of the contact
      */
-    phoneNumbers: string[];
+    phoneNumbers?: ContactXPhoneNumber[];
 
     /**
      * unformatted emails of the contact
      */
-    emails: ContactXEmail[];
+    emails?: ContactXEmail[];
   }
 }

@@ -32,6 +32,24 @@ declare module 'cordova-plugin-contacts-x' {
     static pick(success: (result: ContactX) => void, error: (error: ContactXError) => void);
 
     /**
+     * Save or modify a contact
+     *
+     * @param contact
+     * @param success
+     * @param error
+     */
+    static save(contact: ContactX, success: (result: ContactX) => void, error: (error: ContactXError) => void);
+
+    /**
+     * delete a contact
+     *
+     * @param id
+     * @param success
+     * @param error
+     */
+    static delete(id: string, success: () => void, error: (error: ContactXError) => void);
+
+    /**
      * Check permission is available
      *
      * @param success
@@ -46,6 +64,14 @@ declare module 'cordova-plugin-contacts-x' {
      * @param error
      */
     static requestPermission(success: (result: ContactXPermissionResult) => void, error: (error: ContactXError) => void);
+
+    /**
+     * Request Write Permission (if not available and possible - android only)
+     *
+     * @param success
+     * @param error
+     */
+    static requestWritePermission(success: (result: ContactXPermissionResult) => void, error: (error: ContactXError) => void);
   }
 
 }

@@ -17,6 +17,16 @@ var ContactsX = /** @class */ (function () {
     return plu.pick.apply(plu, arguments);
   };
 
+  ContactsX.save = function (contact, success, failure) {
+    var plu = plugin();
+    return plu.save.apply(plu, arguments);
+  };
+
+  ContactsX.delete = function (id, success, failure) {
+    var plu = plugin();
+    return plu.delete.apply(plu, arguments);
+  };
+
   ContactsX.hasPermission = function (success, failure) {
     var plu = plugin();
     return plu.hasPermission.apply(plu, arguments);
@@ -25,6 +35,11 @@ var ContactsX = /** @class */ (function () {
   ContactsX.requestPermission = function (success, failure) {
     var plu = plugin();
     return plu.requestPermission.apply(plu, arguments);
+  };
+
+  ContactsX.requestWritePermission = function (success, failure) {
+    var plu = plugin();
+    return plu.requestWritePermission.apply(plu, arguments);
   };
 
   return ContactsX;

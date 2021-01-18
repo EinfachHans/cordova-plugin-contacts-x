@@ -15,13 +15,25 @@ var contactsX = {
   pick: function (success, error) {
     exec(success, error, 'ContactsX', 'pick', []);
   },
+  
+  save: function (contact, success, error) {
+    exec(success, error, 'ContactsX', 'save', [contact]);
+  },
+
+  delete: function (id, success, error) {
+    exec(success, error, 'ContactsX', 'delete', [id]);
+  },
 
   hasPermission: function (success, error) {
     exec(success, error, 'ContactsX', 'hasPermission', []);
   },
 
   requestPermission: function (success, error) {
-    exec(success, error, 'ContactsX', 'requestPermission', []);
+    exec(success, error, 'ContactsX', 'requestPermission', [false]);
+  },
+
+  requestWritePermission: function (success, error) {
+    exec(success, error, 'ContactsX', 'requestPermission', [true]);
   }
 }
 
