@@ -100,7 +100,8 @@ import ContactsUI
 
         self.hasPermission { (granted) in
             let dict = [
-                "read": granted
+                "read": granted,
+                "write": granted
             ];
 
             let result:CDVPluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: dict);
@@ -114,7 +115,8 @@ import ContactsUI
 
         self.hasPermission(completionHandler: { (granted) in
             let dict = [
-                "read": granted
+                "read": granted,
+                "write": granted
             ];
 
             let result:CDVPluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: dict);
