@@ -734,7 +734,6 @@ public class ContactsX extends CordovaPlugin {
                 case "mobile":
                     return ContactsContract.CommonDataKinds.Email.TYPE_MOBILE;
             }
-            return ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM;
         }
         return type;
     }
@@ -745,9 +744,6 @@ public class ContactsX extends CordovaPlugin {
     private String getMailType(int type) {
         String stringType;
         switch (type) {
-            case ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM:
-                stringType = "custom";
-                break;
             case ContactsContract.CommonDataKinds.Email.TYPE_HOME:
                 stringType = "home";
                 break;
@@ -774,9 +770,6 @@ public class ContactsX extends CordovaPlugin {
         String stringType;
 
         switch (type) {
-            case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
-                stringType = "custom";
-                break;
             case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
                 stringType = "home";
                 break;
@@ -807,8 +800,6 @@ public class ContactsX extends CordovaPlugin {
             String lowerType = string.toLowerCase(Locale.getDefault());
 
             switch (lowerType) {
-                case "custom":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM;
                 case "home":
                     return ContactsContract.CommonDataKinds.Phone.TYPE_HOME;
                 case "work":
