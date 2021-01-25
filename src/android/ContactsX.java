@@ -777,59 +777,14 @@ public class ContactsX extends CordovaPlugin {
             case ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM:
                 stringType = "custom";
                 break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME:
-                stringType = "home fax";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK:
-                stringType = "work fax";
-                break;
             case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
                 stringType = "home";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                stringType = "mobile";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_PAGER:
-                stringType = "pager";
                 break;
             case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
                 stringType = "work";
                 break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_CALLBACK:
-                stringType = "callback";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_CAR:
-                stringType = "car";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_COMPANY_MAIN:
-                stringType = "company main";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER_FAX:
-                stringType = "other fax";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_RADIO:
-                stringType = "radio";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_TELEX:
-                stringType = "telex";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_TTY_TDD:
-                stringType = "tty tdd";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK_MOBILE:
-                stringType = "work mobile";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK_PAGER:
-                stringType = "work pager";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_ASSISTANT:
-                stringType = "assistant";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_MMS:
-                stringType = "mms";
-                break;
-            case ContactsContract.CommonDataKinds.Phone.TYPE_ISDN:
-                stringType = "isdn";
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                stringType = "mobile";
                 break;
             case ContactsContract.CommonDataKinds.Phone.TYPE_OTHER:
             default:
@@ -852,49 +807,15 @@ public class ContactsX extends CordovaPlugin {
             String lowerType = string.toLowerCase(Locale.getDefault());
 
             switch (lowerType) {
+                case "custom":
+                    return ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM;
                 case "home":
                     return ContactsContract.CommonDataKinds.Phone.TYPE_HOME;
-                case "mobile":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
                 case "work":
                     return ContactsContract.CommonDataKinds.Phone.TYPE_WORK;
-                case "work fax":
-                case "fax":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK;
-                case "home fax":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME;
-                case "pager":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_PAGER;
-                case "other":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_OTHER;
-                case "car":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_CAR;
-                case "company main":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_COMPANY_MAIN;
-                case "isdn":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_ISDN;
-                case "main":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_MAIN;
-                case "other fax":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_OTHER_FAX;
-                case "radio":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_RADIO;
-                case "telex":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_TELEX;
-                case "work mobile":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_WORK_MOBILE;
-                case "work pager":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_WORK_PAGER;
-                case "assistant":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_ASSISTANT;
-                case "mms":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_MMS;
-                case "callback":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_CALLBACK;
-                case "tty ttd":
-                    return ContactsContract.CommonDataKinds.Phone.TYPE_TTY_TDD;
+                case "mobile":
+                    return ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
             }
-            return ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM;
         }
         return type;
     }
