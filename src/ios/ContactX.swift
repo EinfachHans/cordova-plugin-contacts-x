@@ -20,14 +20,23 @@ class ContactX {
         }
         return labeledValues;
     }
+    
+    func getPhoneNumbers() -> [NSDictionary] {
+        let labeledValues: [NSDictionary] = self.contact.phoneNumbers.map { (ob: CNLabeledValue<CNPhoneNumber>) -> NSDictionary in
+            return [
+                "id": ob.identifier,
+                "type": CNLabeledValue<CNPhoneNumber>.localizedString(forLabel: ob.label ?? ""),
+                "value": ob.value.stringValue
+            ]
+        }
+        return labeledValues;
+    }
 
     func getJson() -> NSDictionary {
 
-        var phoneNumbers: [String] = [];
+        var phoneNumbers: [NSDictionary] = [];
         if(options.phoneNumbers) {
-            phoneNumbers = self.contact.phoneNumbers.map { (ob: CNLabeledValue<CNPhoneNumber>) -> String in
-                return ob.value.stringValue
-            }
+            phoneNumbers = self.getPhoneNumbers();
         }
 
         var emails: [NSDictionary] = [];
