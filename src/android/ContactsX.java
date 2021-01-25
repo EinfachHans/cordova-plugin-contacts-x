@@ -300,60 +300,11 @@ public class ContactsX extends CordovaPlugin {
         JSONObject email = new JSONObject();
         int typeCode = cursor.getInt(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.TYPE));
         String typeLabel = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.LABEL));
-        String type = (typeCode == ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM) ? typeLabel : getContactType(typeCode);
+        String type = (typeCode == ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM) ? typeLabel : getMailType(typeCode);
         email.put("id", cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email._ID)));
         email.put("value", cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.DATA)));
         email.put("type", type);
         return email;
-    }
-
-    /**
-     * Converts a string from the W3C Contact API to it's Android int value.
-     */
-    private int getContactType(String string) {
-        int type = ContactsContract.CommonDataKinds.Email.TYPE_OTHER;
-        if (string != null) {
-
-            String lowerType = string.toLowerCase(Locale.getDefault());
-
-            if ("home".equals(lowerType)) {
-                return ContactsContract.CommonDataKinds.Email.TYPE_HOME;
-            } else if ("work".equals(lowerType)) {
-                return ContactsContract.CommonDataKinds.Email.TYPE_WORK;
-            } else if ("other".equals(lowerType)) {
-                return ContactsContract.CommonDataKinds.Email.TYPE_OTHER;
-            } else if ("mobile".equals(lowerType)) {
-                return ContactsContract.CommonDataKinds.Email.TYPE_MOBILE;
-            }
-            return ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM;
-        }
-        return type;
-    }
-
-    /**
-     * getPhoneType converts an Android phone type into a string
-     */
-    private String getContactType(int type) {
-        String stringType;
-        switch (type) {
-            case ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM:
-                stringType = "custom";
-                break;
-            case ContactsContract.CommonDataKinds.Email.TYPE_HOME:
-                stringType = "home";
-                break;
-            case ContactsContract.CommonDataKinds.Email.TYPE_WORK:
-                stringType = "work";
-                break;
-            case ContactsContract.CommonDataKinds.Email.TYPE_MOBILE:
-                stringType = "mobile";
-                break;
-            case ContactsContract.CommonDataKinds.Email.TYPE_OTHER:
-            default:
-                stringType = "other";
-                break;
-        }
-        return stringType;
     }
 
     private void pick() {
@@ -510,7 +461,7 @@ public class ContactsX extends CordovaPlugin {
                         .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                         .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
                         .withValue(ContactsContract.CommonDataKinds.Email.DATA, getJsonString(email, "value"))
-                        .withValue(ContactsContract.CommonDataKinds.Email.TYPE, getContactType(getJsonString(email, "type")))
+                        .withValue(ContactsContract.CommonDataKinds.Email.TYPE, getMailType(getJsonString(email, "type")))
                         .withValue(ContactsContract.CommonDataKinds.Email.LABEL, getJsonString(email, "type"))
                         .build());
             }
@@ -642,7 +593,7 @@ public class ContactsX extends CordovaPlugin {
                         contentValues.put(ContactsContract.Data.RAW_CONTACT_ID, rawId);
                         contentValues.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE);
                         contentValues.put(ContactsContract.CommonDataKinds.Email.DATA, getJsonString(email, "value"));
-                        contentValues.put(ContactsContract.CommonDataKinds.Email.TYPE, getContactType(getJsonString(email, "type")));
+                        contentValues.put(ContactsContract.CommonDataKinds.Email.TYPE, getMailType(getJsonString(email, "type")));
                         contentValues.put(ContactsContract.CommonDataKinds.Email.LABEL, getJsonString(email, "type"));
 
                         ops.add(ContentProviderOperation.newInsert(
@@ -657,7 +608,7 @@ public class ContactsX extends CordovaPlugin {
                                                     ContactsContract.Data.MIMETYPE + "=?",
                                             new String[]{emailId, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE})
                                     .withValue(ContactsContract.CommonDataKinds.Email.DATA, getJsonString(email, "value"))
-                                    .withValue(ContactsContract.CommonDataKinds.Email.TYPE, getContactType(getJsonString(email, "type")))
+                                    .withValue(ContactsContract.CommonDataKinds.Email.TYPE, getMailType(getJsonString(email, "type")))
                                     .withValue(ContactsContract.CommonDataKinds.Email.LABEL, getJsonString(email, "type"))
                                     .build());
                         } else {
@@ -765,9 +716,58 @@ public class ContactsX extends CordovaPlugin {
     }
 
     /**
+     * Converts a string from the W3C Contact API to it's Android int value.
+     */
+    private int getMailType(String string) {
+        int type = ContactsContract.CommonDataKinds.Email.TYPE_OTHER;
+        if (string != null) {
+
+            String lowerType = string.toLowerCase(Locale.getDefault());
+
+            switch (lowerType) {
+                case "home":
+                    return ContactsContract.CommonDataKinds.Email.TYPE_HOME;
+                case "work":
+                    return ContactsContract.CommonDataKinds.Email.TYPE_WORK;
+                case "other":
+                    return ContactsContract.CommonDataKinds.Email.TYPE_OTHER;
+                case "mobile":
+                    return ContactsContract.CommonDataKinds.Email.TYPE_MOBILE;
+            }
+            return ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM;
+        }
+        return type;
+    }
+
+    /**
+     * getPhoneType converts an Android mail type into a string
+     */
+    private String getMailType(int type) {
+        String stringType;
+        switch (type) {
+            case ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM:
+                stringType = "custom";
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_HOME:
+                stringType = "home";
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_WORK:
+                stringType = "work";
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_MOBILE:
+                stringType = "mobile";
+                break;
+            case ContactsContract.CommonDataKinds.Email.TYPE_OTHER:
+            default:
+                stringType = "other";
+                break;
+        }
+        return stringType;
+    }
+
+    /**
      * getPhoneType converts an Android phone type into a string
      *
-     * @param type
      * @return phone type as string.
      */
     private String getPhoneType(int type) {
@@ -842,7 +842,6 @@ public class ContactsX extends CordovaPlugin {
     /**
      * Converts a string from the W3C Contact API to it's Android int value.
      *
-     * @param string
      * @return Android int value
      */
     private int getPhoneType(String string) {
