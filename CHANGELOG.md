@@ -10,7 +10,7 @@
 
 ### Breaking Changes:
 
-- Phonenumber's now returns an array of objects (see [here](readme.md#contactxphonenumber))
+- PhoneNumber's now returns an array of objects (see [here](readme.md#contactxphonenumber))
 
 ## 1.1.0
 - Fields can be specified (**Breaking**: phoneNumbers disabled by default)
