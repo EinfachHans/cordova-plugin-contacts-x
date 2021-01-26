@@ -1,4 +1,6 @@
 declare module 'cordova-plugin-contacts-x' {
+  
+  type ContactType = 'home' |'work' | 'mobile' | 'other';
 
   interface ContactXPhoneNumber {
     id?: string;
@@ -6,7 +8,7 @@ declare module 'cordova-plugin-contacts-x' {
     /**
      * type of the phoneNumber
      */
-    type: string;
+    type: ContactType;
 
     /**
      * the phoneNumber itself
@@ -20,7 +22,7 @@ declare module 'cordova-plugin-contacts-x' {
     /**
      * type of the mail
      */
-    type: string;
+    type: ContactType;
 
     /**
      * the mail itself
