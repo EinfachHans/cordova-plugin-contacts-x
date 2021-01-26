@@ -14,7 +14,7 @@ class ContactX {
         let labeledValues: [NSDictionary] = self.contact.emailAddresses.map { (ob: CNLabeledValue<NSString>) -> NSDictionary in
             return [
                 "id": ob.identifier,
-                "type": CNLabeledValue<NSString>.localizedString(forLabel: ob.label ?? ""),
+                "type": ContactsX.mapLabelToSring(label: ob.label ?? ""),
                 "value": ob.value
             ]
         }
@@ -25,7 +25,7 @@ class ContactX {
         let labeledValues: [NSDictionary] = self.contact.phoneNumbers.map { (ob: CNLabeledValue<CNPhoneNumber>) -> NSDictionary in
             return [
                 "id": ob.identifier,
-                "type": CNLabeledValue<CNPhoneNumber>.localizedString(forLabel: ob.label ?? ""),
+                "type": ContactsX.mapStringToLabel(string: ob.label ?? ""),
                 "value": ob.value.stringValue
             ]
         }
