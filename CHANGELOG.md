@@ -1,6 +1,6 @@
 # Changelog
 
-## unreleased
+## 2.0.0
 - `rawId` added to contact object on android
 - `pick` Method added
 - `save` Method added
