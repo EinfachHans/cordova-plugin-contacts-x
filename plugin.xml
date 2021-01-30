@@ -21,6 +21,7 @@
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.READ_CONTACTS" />
             <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+            <uses-permission android:name="android.permission.GET_ACCOUNTS" />
         </config-file>
 
         <source-file src="src/android/ContactsX.java" target-dir="src/de/einfachhans/ContactsX"/>
