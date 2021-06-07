@@ -14,18 +14,18 @@ class ContactX {
         let labeledValues: [NSDictionary] = self.contact.emailAddresses.map { (ob: CNLabeledValue<NSString>) -> NSDictionary in
             return [
                 "id": ob.identifier,
-                "type": ContactsX.mapLabelToSring(label: ob.label ?? ""),
+                "type": ContactsX.mapLabelToString(label: ob.label ?? ""),
                 "value": ob.value
             ]
         }
         return labeledValues;
     }
-    
+
     func getPhoneNumbers() -> [NSDictionary] {
         let labeledValues: [NSDictionary] = self.contact.phoneNumbers.map { (ob: CNLabeledValue<CNPhoneNumber>) -> NSDictionary in
             return [
                 "id": ob.identifier,
-                "type": ContactsX.mapStringToLabel(string: ob.label ?? ""),
+                "type": ContactsX.mapLabelToString(string: ob.label ?? ""),
                 "value": ob.value.stringValue
             ]
         }

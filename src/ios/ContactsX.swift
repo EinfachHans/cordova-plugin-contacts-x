@@ -67,11 +67,11 @@ import ContactsUI
         }
         return keysToFetch;
     }
-    
+
     @objc(pick:)
     func pick(command: CDVInvokedUrlCommand) {
         _callbackId = command.callbackId;
-        
+
         self.hasPermission { (granted) in
             guard granted else {
                 self.returnError(error: ErrorCodes.PermissionDenied);
@@ -82,7 +82,7 @@ import ContactsUI
             self.viewController.present(contactPicker, animated: true, completion: nil)
         }
     }
-    
+
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         let fields: NSDictionary = [
             "phoneNumbers": true,
@@ -93,31 +93,31 @@ import ContactsUI
         let result: CDVPluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: contactResult);
         self.commandDelegate.send(result, callbackId: self._callbackId);
     }
-    
+
     @objc(save:)
     func saveOrModify(command: CDVInvokedUrlCommand) {
         _callbackId = command.callbackId;
-        
+
         self.hasPermission { (granted) in
             guard granted else {
                 self.returnError(error: ErrorCodes.PermissionDenied);
                 return;
             }
-            
+
             let tmpContactOptions = command.argument(at: 0) as? NSDictionary;
             if(tmpContactOptions == nil) {
                 self.returnError(error: ErrorCodes.WrongJsonObject, message: "You need to pass a contact object");
                 return;
             }
             let contactOptions = ContactXOptions.init(options: tmpContactOptions);
-            
+
             let retId: String?;
             if(contactOptions.id == nil) {
                 retId = self.saveNewContact(contact: contactOptions);
             } else {
                 retId = self.modifyContact(contact: contactOptions);
             }
-            
+
             if(retId != nil) {
                 let contact = self.findById(id: retId!);
                 if(contact != nil) {
@@ -128,7 +128,7 @@ import ContactsUI
             self.returnError(error: ErrorCodes.UnknownError);
         }
     }
-    
+
     func saveNewContact(contact: ContactXOptions) -> String? {
         let newContact = CNMutableContact();
         if(contact.firstName != nil) {
@@ -150,7 +150,7 @@ import ContactsUI
                 return CNLabeledValue<NSString>(label: ContactsX.mapStringToLabel(string: ob.type), value: ob.value as NSString);
             };
         }
-        
+
         let store = CNContactStore();
         let saveRequest = CNSaveRequest();
         saveRequest.add(newContact, toContainerWithIdentifier: nil);
@@ -165,11 +165,11 @@ import ContactsUI
             return nil;
         }
     }
-    
+
     func modifyContact(contact: ContactXOptions) -> String? {
         let existingContact = self.findById(id: contact.id!);
         let editContact = existingContact!.contact.mutableCopy() as! CNMutableContact;
-        
+
         if(contact.firstName != nil) {
             editContact.givenName = contact.firstName!;
         }
@@ -213,7 +213,7 @@ import ContactsUI
                 editContact.emailAddresses = newMails;
             }
         }
-        
+
         let store = CNContactStore();
         let saveRequest = CNSaveRequest();
         saveRequest.update(editContact);
@@ -228,7 +228,7 @@ import ContactsUI
             return nil;
         }
     }
-    
+
     func findById(id: String) -> ContactX? {
         let options = ContactsXOptions.init(options: [
             "fields": [
@@ -249,17 +249,17 @@ import ContactsUI
             return nil;
         }
     }
-    
+
     @objc(delete:)
     func delete(command: CDVInvokedUrlCommand) {
         _callbackId = command.callbackId;
-        
+
         self.hasPermission { (granted) in
             guard granted else {
                 self.returnError(error: ErrorCodes.PermissionDenied);
                 return;
             }
-            
+
             let id = command.argument(at: 0) as! String?;
             if(id == nil) {
                 self.returnError(error: ErrorCodes.WrongJsonObject);
@@ -270,14 +270,14 @@ import ContactsUI
                 self.returnError(error: ErrorCodes.UnknownError);
                 return;
             }
-            
+
             let store = CNContactStore();
             let request = CNSaveRequest();
             request.delete(contact!.contact.mutableCopy() as! CNMutableContact);
-            
+
             do {
                try store.execute(request);
-               
+
                 let result:CDVPluginResult = CDVPluginResult(status: CDVCommandStatus_OK);
                 self.commandDelegate.send(result, callbackId: self._callbackId)
            } catch {
@@ -351,7 +351,7 @@ import ContactsUI
             _callbackId = nil;
         }
     }
-    
+
     static func mapStringToLabel(string: String) -> String {
         switch string {
         case "home":
@@ -364,8 +364,8 @@ import ContactsUI
             return CNLabelOther;
         }
     }
-    
-    static func mapLabelToSring(label: String) -> String {
+
+    static func mapLabelToString(label: String) -> String {
         switch label {
         case CNLabelHome:
             return "home";
