@@ -25,7 +25,7 @@ class ContactX {
         let labeledValues: [NSDictionary] = self.contact.phoneNumbers.map { (ob: CNLabeledValue<CNPhoneNumber>) -> NSDictionary in
             return [
                 "id": ob.identifier,
-                "type": ContactsX.mapLabelToString(string: ob.label ?? ""),
+                "type": ContactsX.mapLabelToString(label: ob.label ?? ""),
                 "value": ob.value.stringValue
             ]
         }
