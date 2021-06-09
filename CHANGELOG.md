@@ -1,5 +1,8 @@
 # Changelog
 
+# 2.0.2
+- Fix typo
+
 # 2.0.1
 - Fix iOS Phone Type (closes [#9](https://github.com/EinfachHans/cordova-plugin-contacts-x/issues/9))
 
