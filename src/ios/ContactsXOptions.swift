@@ -31,6 +31,7 @@ class ContactXOptions {
     var firstName: String? = nil;
     var middleName: String? = nil;
     var familyName: String? = nil;
+    var avatar: Data? = nil;
     var phoneNumbers: [ContactXValueTypeOptions]? = nil;
     var emails: [ContactXValueTypeOptions]? = nil;
     
@@ -40,6 +41,7 @@ class ContactXOptions {
             firstName = options?.value(forKey: "firstName") as? String;
             middleName = options?.value(forKey: "middleName") as? String;
             familyName = options?.value(forKey: "familyName") as? String;
+            avatar = (options?.value(forKey: "avatar") as? String)?.data(using: .utf8);
             let phonenumberArray = options?.value(forKey: "phoneNumbers") as? [NSDictionary];
             if(phonenumberArray != nil) {
                 phoneNumbers = self.parsePhoneNumbers(array: phonenumberArray!);

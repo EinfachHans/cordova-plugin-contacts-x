@@ -469,6 +469,18 @@ public class ContactsX extends CordovaPlugin {
             LOG.d(LOG_TAG, "Could not get emails");
         }
 
+        // Add avatar
+        String avatarString = getJsonString(contact, "avatar");
+        if (avatarString != null && !avatarString.isEmpty()) {
+            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Photo.DATA15, avatarString.getBytes())
+                    .build());
+        } else {
+            LOG.d(LOG_TAG, "Could not get avatar");
+        }
+
         String newId = null;
         //Add contact
         try {
