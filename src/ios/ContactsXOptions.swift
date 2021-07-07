@@ -43,7 +43,7 @@ class ContactXOptions {
             familyName = options?.value(forKey: "familyName") as? String;
             let avatarString = options?.value(forKey: "avatar") as? String;
             if(avatarString != nil) {
-                avatar = Data(NSData(base64Encoded: avatarString, options: NSData.Base64DecodingOptions.init(rawValue: 0)))
+                avatar = Data(NSData(base64Encoded: avatarString!, options: NSData.Base64DecodingOptions.init(rawValue: 0))!)
             }
             let phonenumberArray = options?.value(forKey: "phoneNumbers") as? [NSDictionary];
             if(phonenumberArray != nil) {
