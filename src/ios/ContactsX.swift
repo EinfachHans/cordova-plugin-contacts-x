@@ -140,6 +140,9 @@ import ContactsUI
         if(contact.familyName != nil) {
             newContact.familyName = contact.familyName!;
         }
+        if (contact.avatar != nil) {
+            newContact.imageData = contact.avatar;
+        }
         if(contact.phoneNumbers != nil) {
             newContact.phoneNumbers = contact.phoneNumbers!.map { (ob: ContactXValueTypeOptions) -> CNLabeledValue<CNPhoneNumber> in
                 return CNLabeledValue<CNPhoneNumber>(label: ContactsX.mapStringToLabel(string: ob.type), value: CNPhoneNumber(stringValue: ob.value));
