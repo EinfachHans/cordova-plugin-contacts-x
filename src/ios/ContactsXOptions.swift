@@ -41,7 +41,10 @@ class ContactXOptions {
             firstName = options?.value(forKey: "firstName") as? String;
             middleName = options?.value(forKey: "middleName") as? String;
             familyName = options?.value(forKey: "familyName") as? String;
-            avatar = (options?.value(forKey: "avatar") as? String)?.data(using: .utf8);
+            let avatarString = options?.value(forKey: "avatar") as? String;
+            if(avatarString != nil) {
+                avatar = Data(NSData(base64Encoded: avatarString, options: NSData.Base64DecodingOptions.init(rawValue: 0)))
+            }
             let phonenumberArray = options?.value(forKey: "phoneNumbers") as? [NSDictionary];
             if(phonenumberArray != nil) {
                 phoneNumbers = self.parsePhoneNumbers(array: phonenumberArray!);

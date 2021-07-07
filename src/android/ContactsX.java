@@ -24,10 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -475,7 +472,7 @@ public class ContactsX extends CordovaPlugin {
             ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                     .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Photo.DATA15, avatarString.getBytes())
+                    .withValue(ContactsContract.CommonDataKinds.Photo.DATA15, Base64.getDecoder().decode(avatarString))
                     .build());
         } else {
             LOG.d(LOG_TAG, "Could not get avatar");
