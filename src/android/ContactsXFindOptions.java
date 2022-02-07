@@ -8,6 +8,7 @@ public class ContactsXFindOptions {
     boolean firstName = true;
     boolean middleName = true;
     boolean familyName = true;
+    boolean organizationName = true;
     boolean phoneNumbers;
     boolean emails;
 
@@ -26,6 +27,7 @@ public class ContactsXFindOptions {
         this.firstName = fields.optBoolean("firstName", true);
         this.middleName = fields.optBoolean("middleName", true);
         this.familyName = fields.optBoolean("familyName", true);
+        this.organizationName = fields.optBoolean("organizationName", true);
         this.phoneNumbers = fields.optBoolean("phoneNumbers");
         this.emails = fields.optBoolean("emails");
     }

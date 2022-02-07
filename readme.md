@@ -193,6 +193,7 @@ Find Contacts by given options. If you don't set a field to true, it is not incl
         - firstName (boolean) - *default: true*
         - middleName (boolean) - *default: true*
         - familyName (boolean) - *default: true*
+        - organizationName (boolean) - *default: true*
         - phoneNumbers (boolean)
         - emails (boolean)
 
@@ -248,6 +249,7 @@ window.ContactsX.save(
   {
     firstName: "Hans",
     familyName: "Test",
+    organizationName : "Einfach",
     phoneNumebers: [{
       type: "mobile",
       value: "110"
@@ -293,6 +295,7 @@ window.ContactsX.delete("some_id",
 - firstName (string)
 - middleName (string)
 - familyName (string)
+- organizationName (string)
 - phoneNumbers ([ContactXPhoneNumber](contactxphonenumber)[])
 - emails ([ContactXEmail](#contactxemail)[])
 
