@@ -1,9 +1,11 @@
 import Contacts
 import ContactsUI
+import PhoneNumberKit
 
 @objc(ContactsX) class ContactsX : CDVPlugin, CNContactPickerDelegate {
 
     var _callbackId: String?
+    static var _PhoneNumberKitInstance: PhoneNumberKit? = nil;
 
     @objc(pluginInitialize)
     override func pluginInitialize() {
@@ -385,6 +387,13 @@ import ContactsUI
         default:
             return "other";
         }
+    }
+    
+    static func getPhoneNumberKitInstance() -> PhoneNumberKit {
+        if(ContactsX._PhoneNumberKitInstance == nil){
+            ContactsX._PhoneNumberKitInstance = PhoneNumberKit();
+        }
+        return ContactsX._PhoneNumberKitInstance!;
     }
 }
 

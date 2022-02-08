@@ -6,13 +6,20 @@ class ContactsXOptions {
     var organizationName: Bool = true;
     var phoneNumbers: Bool = false;
     var emails: Bool = false;
+    var baseCountryCode : String?? = nil;
 
     init(options: NSDictionary?) {
         if(options != nil) {
-            let fields = options?.value(forKey: "fields") as? NSDictionary ?? nil;
 
+            let fields = options?.value(forKey: "fields") as? NSDictionary ?? nil;
             if(fields != nil) {
                 self.parseFields(fields: fields!)
+            }
+
+            let baseCountryCode = options?.value(forKey: "baseCountryCode") as? String ?? nil;
+            
+            if(baseCountryCode != nil) {
+                self.baseCountryCode = baseCountryCode;
             }
         }
     }
