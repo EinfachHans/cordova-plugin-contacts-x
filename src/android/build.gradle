@@ -26,7 +26,6 @@ android {
         minSdkVersion 12
         targetSdkVersion 22
         multiDexEnabled true
-        applicationId "your_package_name"
     }
 
     buildTypes {
