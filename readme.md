@@ -28,6 +28,7 @@ Please consider donating if you're using this plugin in an app that makes you mo
 - [Usage](#usage)
   - [Failure Callbacks](#failure-callbacks)
   - [Error Codes](#error-codes)
+  - [Normalization E.164](#normalization-e164)
 - [Api](#api)
   - [hasPermission](#haspermission)
   - [requestPermission](#requestpermission)
@@ -55,7 +56,7 @@ Please consider donating if you're using this plugin in an app that makes you mo
 
 ## Android
 
-For normalization Android the plugin implements [android - PhoneNumberUtils](https://developer.android.com/reference/android/telephony/PhoneNumberUtils) 
+For normalization Android the plugin implements [Google - libphonenumber](https://github.com/google/libphonenumber) 
 
 ## iOS
 
@@ -111,7 +112,7 @@ The following Error Codes can be fired by this Plugin:
 
 They can be accessed over `window.ContactsX.ErrorCodes` and are present in the TypeScript definition too of course. 
 
-### Normalization E.164
+## Normalization E.164
 
 If `baseCountryCode` is passed as an option to the [find](#find) method, the plugin attempts to resolve the normalized phone numbers in E.164 format. Setting a wrong (ISO 3166-1 alpha-2) value would cause the libary to not be able to (correctly) resolve the normalized number. Typically the value should correspond to the device (sim) country.
 
