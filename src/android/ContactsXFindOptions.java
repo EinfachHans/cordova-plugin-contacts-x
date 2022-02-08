@@ -4,6 +4,8 @@ import org.json.JSONObject;
 
 public class ContactsXFindOptions {
 
+    String baseCountryCode = null;
+    
     boolean displayName = true;
     boolean firstName = true;
     boolean middleName = true;
@@ -17,6 +19,12 @@ public class ContactsXFindOptions {
 
             if(fields != null) {
                 this.parseFields(fields);
+            }
+
+            String baseCountryCode = options.optString("baseCountryCode", null);
+
+            if(baseCountryCode != null){
+                this.baseCountryCode = baseCountryCode;
             }
         }
     }

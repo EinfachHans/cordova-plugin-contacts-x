@@ -28,6 +28,7 @@ Please consider donating if you're using this plugin in an app that makes you mo
 - [Usage](#usage)
   - [Failure Callbacks](#failure-callbacks)
   - [Error Codes](#error-codes)
+  - [Normalization E.164](#normalization-e164)
 - [Api](#api)
   - [hasPermission](#haspermission)
   - [requestPermission](#requestpermission)
@@ -55,11 +56,15 @@ Please consider donating if you're using this plugin in an app that makes you mo
 
 ## Android
 
+For normalization Android the plugin implements [Google - libphonenumber](https://github.com/google/libphonenumber) 
+
 ## iOS
 
 This Plugin is developed in Swift and automaticaly adds the Plugin to [Support Swift](https://github.com/akofman/cordova-plugin-add-swift-support).
 
 I developed it, testing with **cordova-ios@6.1.0**.
+
+For normalization on iOS the plugin implements [marmelroy - PhoneNumberKit](https://github.com/marmelroy/PhoneNumberKit)
 
 # Environment Variables
 
@@ -106,6 +111,22 @@ The following Error Codes can be fired by this Plugin:
 - UnknownError
 
 They can be accessed over `window.ContactsX.ErrorCodes` and are present in the TypeScript definition too of course. 
+
+## Normalization E.164
+
+If `baseCountryCode` is passed as an option to the [find](#find) method, the plugin attempts to resolve the normalized phone numbers in E.164 format. Setting a wrong (ISO 3166-1 alpha-2) value would cause the libary to not be able to (correctly) resolve the normalized number. Typically the value should correspond to the device (sim) country.
+
+#### Output example
+Assuming that the device is from the "Netherlands", the correct `baseCountryCode` would be `"NL"`. 
+
+| `baseCountryCode`:| `"NL"`       | `"US"`       | `""`|
+|-------------------|--------------|--------------|-----|
+| +49 151 12345     | +4915112345  | +4915112345" |  "" |
+| (06) 123 4567     | +3161234567  | ""           |  "" |
+| +1 (424) 555-1234 | +14245551234 | +14245551234 |  "" |
+| +31 (0) 6 987 654 | +316987654   | +316987654   |  "" |
+
+*For context the "nationalNumber" of the Netherlands is "+31"*
 
 # Api
 
@@ -181,7 +202,7 @@ Same SuccessType as **hasPermission()**
 
 ## find
 
-Find Contacts by given options. If you don't set a field to true, it is not included or empty in the result
+Find Contacts by given options. If you don't set a field to `true`, it is not included or empty in the result. If `baseCountryCode` is passed as an option, the plugin attempts to resolve the normalized E.164 phone numbers in the `phoneNumbers` Array. 
 
 ### Parameters:
 
@@ -195,6 +216,7 @@ Find Contacts by given options. If you don't set a field to true, it is not incl
         - familyName (boolean) - *default: true*
         - phoneNumbers (boolean)
         - emails (boolean)
+    - baseCountryCode : *default: null (3166-1 alpha-2 countrycode)*    
 
 ```js
 window.ContactsX.find(function(success) {
@@ -204,7 +226,8 @@ window.ContactsX.find(function(success) {
 }, {
   fields: {
     phoneNumbers: true
-  }
+  },
+  baseCountryCode : 'GB'
 });
 ```
 
@@ -298,6 +321,7 @@ window.ContactsX.delete("some_id",
 
 ## ContactXPhoneNumber
 - id (string)
+- normalized (string) *if baseCountryCode is set/valid*
 - type (string)
 - value (string)
 
