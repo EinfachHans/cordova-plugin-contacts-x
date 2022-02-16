@@ -3,8 +3,6 @@ package de.einfachhans.ContactsX;
 import org.json.JSONObject;
 
 public class ContactsXFindOptions {
-
-    String baseCountryCode = null;
     
     boolean displayName = true;
     boolean firstName = true;
@@ -12,6 +10,7 @@ public class ContactsXFindOptions {
     boolean familyName = true;
     boolean phoneNumbers;
     boolean emails;
+    String baseCountryCode = null;
 
     public ContactsXFindOptions(JSONObject options) {
         if (options != null) {

@@ -56,7 +56,7 @@ Please consider donating if you're using this plugin in an app that makes you mo
 
 ## Android
 
-For normalization Android the plugin implements [Google - libphonenumber](https://github.com/google/libphonenumber) 
+For normalization the plugin implements [Google - libphonenumber](https://github.com/google/libphonenumber) 
 
 ## iOS
 
@@ -114,7 +114,7 @@ They can be accessed over `window.ContactsX.ErrorCodes` and are present in the T
 
 ## Normalization E.164
 
-If `baseCountryCode` is passed as an option to the [find](#find) method, the plugin attempts to resolve the normalized phone numbers in E.164 format. Setting a wrong (ISO 3166-1 alpha-2) value would cause the libary to not be able to (correctly) resolve the normalized number. Typically the value should correspond to the device (sim) country.
+If `baseCountryCode` is passed as an option to the [find](#find) method, the plugin attempts to resolve the normalized phone numbers in E.164 format. Setting a wrong (ISO 3166-1 alpha-2) value would cause the libary to not be able to (correctly) resolve the normalized number. Typically the value should correspond to the device (SIM) country.
 
 #### Output example
 Assuming that the device is from the "Netherlands", the correct `baseCountryCode` would be `"NL"`. 
@@ -202,7 +202,7 @@ Same SuccessType as **hasPermission()**
 
 ## find
 
-Find Contacts by given options. If you don't set a field to `true`, it is not included or empty in the result. If `baseCountryCode` is passed as an option, the plugin attempts to resolve the normalized E.164 phone numbers in the `phoneNumbers` Array. 
+Find Contacts by given options. If you don't set a field in `fields` to `true`, it is not included or empty in the result. When `baseCountryCode` is defined (using a valid [ISO 3166-1 alpha 2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements) code), the plugin attempts to resolve the normalized E.164 phone numbers in the `phoneNumbers` Array.
 
 ### Parameters:
 
@@ -216,7 +216,7 @@ Find Contacts by given options. If you don't set a field to `true`, it is not in
         - familyName (boolean) - *default: true*
         - phoneNumbers (boolean)
         - emails (boolean)
-    - baseCountryCode : *default: null (3166-1 alpha-2 countrycode)*    
+    - baseCountryCode (string) - *default: null*    
 
 ```js
 window.ContactsX.find(function(success) {
