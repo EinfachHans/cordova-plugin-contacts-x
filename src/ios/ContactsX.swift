@@ -67,6 +67,9 @@ import PhoneNumberKit
         if(options.emails) {
             keysToFetch.append(CNContactEmailAddressesKey);
         }
+        if(options.organizationName){
+            keysToFetch.append(CNContactOrganizationNameKey)
+        }
         return keysToFetch;
     }
 
@@ -142,6 +145,9 @@ import PhoneNumberKit
         if(contact.familyName != nil) {
             newContact.familyName = contact.familyName!;
         }
+        if(contact.organizationName != nil) {
+            newContact.organizationName = contact.organizationName!;
+        }
         if(contact.phoneNumbers != nil) {
             newContact.phoneNumbers = contact.phoneNumbers!.map { (ob: ContactXValueTypeOptions) -> CNLabeledValue<CNPhoneNumber> in
                 return CNLabeledValue<CNPhoneNumber>(label: ContactsX.mapStringToLabel(string: ob.type), value: CNPhoneNumber(stringValue: ob.value));
@@ -180,6 +186,9 @@ import PhoneNumberKit
         }
         if(contact.familyName != nil) {
             editContact.familyName = contact.familyName!;
+        }
+        if(contact.organizationName != nil) {
+            editContact.organizationName = contact.organizationName!;
         }
         if(contact.phoneNumbers != nil) {
             if(contact.phoneNumbers?.count == 0) {

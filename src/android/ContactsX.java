@@ -192,6 +192,9 @@ public class ContactsX extends CordovaPlugin {
             projection.add(ContactsContract.CommonDataKinds.Email.TYPE);
             projection.add(ContactsContract.CommonDataKinds.Email.LABEL);
         }
+        if (options.organizationName) {
+            projection.add(ContactsContract.CommonDataKinds.Organization.COMPANY);
+        }
 
         return projection;
     }
@@ -206,6 +209,9 @@ public class ContactsX extends CordovaPlugin {
         }
         if (options.firstName || options.middleName || options.familyName) {
             selectionArgs.add(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+        }
+        if (options.organizationName) {
+            selectionArgs.add(ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE);
         }
 
         return selectionArgs;
@@ -263,6 +269,12 @@ public class ContactsX extends CordovaPlugin {
                         JSONArray emailAddresses = jsContact.getJSONArray("emails");
                         emailAddresses.put(emailQuery(contactsCursor));
                         break;
+                    case ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE:
+                        if (options.organizationName) {
+                            String organizationName = contactsCursor.getString(contactsCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Organization.COMPANY));
+                            jsContact.put("organizationName", organizationName);
+                        }
+                        break;    
                     case ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE:
                         try {
                             if (options.firstName) {
@@ -452,6 +464,16 @@ public class ContactsX extends CordovaPlugin {
         } else {
             LOG.d(LOG_TAG, "All \"name\" properties are empty");
         }
+        
+        // Add organizationName
+        String organizationName = getJsonString(contact, "organizationName");
+        if(organizationName != null){
+            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Organization.COMPANY, organizationName)
+                    .build());
+        }
 
         //Add phone numbers
         JSONArray phones;
@@ -544,6 +566,20 @@ public class ContactsX extends CordovaPlugin {
             }
 
             ops.add(builder.build());
+        }
+
+        // Modify organizationName
+        String organizationName = getJsonString(contact, "organizationName");
+        if(organizationName != null){
+            try {
+                ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                        .withValue(ContactsContract.Data.RAW_CONTACT_ID, rawId)
+                        .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE)
+                        .withValue(ContactsContract.CommonDataKinds.Organization.COMPANY, organizationName)
+                        .build());
+            } catch (Error error) {
+                LOG.d(LOG_TAG, "Could not set organizationName" + error);
+            }
         }
 
         // Modify phone numbers

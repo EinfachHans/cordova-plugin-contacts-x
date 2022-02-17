@@ -60,6 +60,9 @@ class ContactX {
         if(options.familyName) {
             result["familyName"] = self.contact.familyName;
         }
+        if(options.organizationName) {
+            result["organizationName"] = self.contact.organizationName;
+        }
 
         return result as NSDictionary;
     }
