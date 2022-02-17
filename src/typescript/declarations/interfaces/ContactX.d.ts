@@ -55,6 +55,11 @@ declare module 'cordova-plugin-contacts-x' {
     familyName?: string;
 
     /**
+     * organization name of the contact
+     */
+    organizationName?: string;
+
+    /**
      * unformatted phone-numbers of the contact
      */
     phoneNumbers?: ContactXPhoneNumber[];
@@ -63,5 +68,6 @@ declare module 'cordova-plugin-contacts-x' {
      * unformatted emails of the contact
      */
     emails?: ContactXEmail[];
+
   }
 }

@@ -3,6 +3,7 @@ class ContactsXOptions {
     var firstName: Bool = true;
     var middleName: Bool = true;
     var familyName: Bool = true;
+    var organizationName: Bool = true;
     var phoneNumbers: Bool = false;
     var emails: Bool = false;
     var baseCountryCode : String?? = nil;
@@ -27,6 +28,7 @@ class ContactsXOptions {
         firstName = fields.value(forKey: "firstName") as? Bool ?? true;
         middleName = fields.value(forKey: "middleName") as? Bool ?? true;
         familyName = fields.value(forKey: "familyName") as? Bool ?? true;
+        organizationName = fields.value(forKey: "organizationName") as? Bool ?? true;
         phoneNumbers = fields.value(forKey: "phoneNumbers") as? Bool ?? false;
         emails = fields.value(forKey: "emails") as? Bool ?? false;
     }
@@ -38,6 +40,7 @@ class ContactXOptions {
     var firstName: String? = nil;
     var middleName: String? = nil;
     var familyName: String? = nil;
+    var organizationName: String? = nil;
     var phoneNumbers: [ContactXValueTypeOptions]? = nil;
     var emails: [ContactXValueTypeOptions]? = nil;
     
@@ -47,6 +50,7 @@ class ContactXOptions {
             firstName = options?.value(forKey: "firstName") as? String;
             middleName = options?.value(forKey: "middleName") as? String;
             familyName = options?.value(forKey: "familyName") as? String;
+            organizationName = options?.value(forKey: "organizationName") as? String;
             let phonenumberArray = options?.value(forKey: "phoneNumbers") as? [NSDictionary];
             if(phonenumberArray != nil) {
                 phoneNumbers = self.parsePhoneNumbers(array: phonenumberArray!);

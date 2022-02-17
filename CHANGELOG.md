@@ -1,5 +1,3 @@
-# Changelog
-
 # 2.0.3
 - Rename definition File to work on case-sensitive file system [#11](https://github.com/EinfachHans/cordova-plugin-contacts-x/pull/11)
 
