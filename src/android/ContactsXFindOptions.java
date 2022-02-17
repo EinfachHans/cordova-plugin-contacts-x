@@ -3,13 +3,14 @@ package de.einfachhans.ContactsX;
 import org.json.JSONObject;
 
 public class ContactsXFindOptions {
-
+    
     boolean displayName = true;
     boolean firstName = true;
     boolean middleName = true;
     boolean familyName = true;
     boolean phoneNumbers;
     boolean emails;
+    String baseCountryCode = null;
 
     public ContactsXFindOptions(JSONObject options) {
         if (options != null) {
@@ -17,6 +18,12 @@ public class ContactsXFindOptions {
 
             if(fields != null) {
                 this.parseFields(fields);
+            }
+
+            String baseCountryCode = options.optString("baseCountryCode", null);
+
+            if(baseCountryCode != null){
+                this.baseCountryCode = baseCountryCode;
             }
         }
     }
