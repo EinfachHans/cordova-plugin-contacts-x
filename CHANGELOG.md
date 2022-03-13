@@ -1,3 +1,10 @@
+### [2.1.1](https://github.com/EinfachHans/cordova-plugin-contacts-x/compare/V2.1.0...V2.1.1) (2022-03-13)
+
+
+### Bug Fixes
+
+* webview no longer gets removed ([#25](https://github.com/EinfachHans/cordova-plugin-contacts-x/issues/25)) ([b5aefa8](https://github.com/EinfachHans/cordova-plugin-contacts-x/commit/b5aefa8df94510e5ca0e3b2a03df8c9b842a89b6))
+
 ## [2.1.0](https://github.com/EinfachHans/cordova-plugin-contacts-x/compare/V2.0.3...V2.1.0) (2022-02-17)
 
 
