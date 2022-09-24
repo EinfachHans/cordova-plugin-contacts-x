@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<plugin id="cordova-plugin-contacts-x" version="2.0.3" xmlns="http://apache.org/cordova/ns/plugins/1.0">
+<plugin id="cordova-plugin-contacts-x" version="2.1.1" xmlns="http://apache.org/cordova/ns/plugins/1.0">
     <name>ContactsX</name>
     <description>Cordova Plugins for managing contacts</description>
 
