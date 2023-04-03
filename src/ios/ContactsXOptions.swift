@@ -30,7 +30,7 @@ class ContactsXOptions {
         middleName = fields.value(forKey: "middleName") as? Bool ?? true;
         familyName = fields.value(forKey: "familyName") as? Bool ?? true;
         organizationName = fields.value(forKey: "organizationName") as? Bool ?? true;
-        notes = fields.value(forKey: "notes") as? Bool ?? true;
+        notes = fields.value(forKey: "note") as? Bool ?? true;
         phoneNumbers = fields.value(forKey: "phoneNumbers") as? Bool ?? false;
         emails = fields.value(forKey: "emails") as? Bool ?? false;
     }
@@ -54,7 +54,7 @@ class ContactXOptions {
             middleName = options?.value(forKey: "middleName") as? String;
             familyName = options?.value(forKey: "familyName") as? String;
             organizationName = options?.value(forKey: "organizationName") as? String;
-            notes = options?.value(forKey: "notes") as? String;
+            notes = options?.value(forKey: "note") as? String;
             let phonenumberArray = options?.value(forKey: "phoneNumbers") as? [NSDictionary];
             if(phonenumberArray != nil) {
                 phoneNumbers = self.parsePhoneNumbers(array: phonenumberArray!);
