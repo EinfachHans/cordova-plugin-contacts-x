@@ -195,6 +195,9 @@ public class ContactsX extends CordovaPlugin {
         if (options.organizationName) {
             projection.add(ContactsContract.CommonDataKinds.Organization.COMPANY);
         }
+        if (options.notes) {
+            projection.add(ContactsContract.CommonDataKinds.Note.NOTE);
+        }
 
         return projection;
     }
@@ -212,6 +215,9 @@ public class ContactsX extends CordovaPlugin {
         }
         if (options.organizationName) {
             selectionArgs.add(ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE);
+        }
+        if (options.notes) {
+            selectionArgs.add(ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE);
         }
 
         return selectionArgs;
@@ -275,6 +281,12 @@ public class ContactsX extends CordovaPlugin {
                             jsContact.put("organizationName", organizationName);
                         }
                         break;    
+                    case ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE:
+                        if (options.notes) {
+                            String note = contactsCursor.getString(contactsCursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Note.NOTE));
+                            jsContact.put("notes", note);
+                        }
+                        break;  
                     case ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE:
                         try {
                             if (options.firstName) {
@@ -475,6 +487,16 @@ public class ContactsX extends CordovaPlugin {
                     .build());
         }
 
+        // Add note
+        String note = getJsonString(contact, "note");
+        if (note != null) {
+            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Note.NOTE, note)
+                    .build());
+        }
+
         //Add phone numbers
         JSONArray phones;
         try {
@@ -580,6 +602,19 @@ public class ContactsX extends CordovaPlugin {
             } catch (Error error) {
                 LOG.d(LOG_TAG, "Could not set organizationName" + error);
             }
+        }
+        // Modify note
+        String note = getJsonString(contact, "note");
+            if (note != null) {
+                try {
+                     ops.add(ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
+                            .withSelection(ContactsContract.Data.RAW_CONTACT_ID + "=? AND " + ContactsContract.Data.MIMETYPE + "=?",
+                     new String[]{String.valueOf(rawId), ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE})
+                            .withValue(ContactsContract.CommonDataKinds.Note.NOTE, note)
+                            .build());
+                } catch (Error error) {
+                    LOG.d(LOG_TAG, "Could not set note" + error);
+                }
         }
 
         // Modify phone numbers

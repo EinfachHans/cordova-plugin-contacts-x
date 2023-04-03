@@ -9,6 +9,7 @@ public class ContactsXFindOptions {
     boolean middleName = true;
     boolean familyName = true;
     boolean organizationName = true;
+    boolean notes = true;
     boolean phoneNumbers;
     boolean emails;
     String baseCountryCode = null;
@@ -35,6 +36,7 @@ public class ContactsXFindOptions {
         this.middleName = fields.optBoolean("middleName", true);
         this.familyName = fields.optBoolean("familyName", true);
         this.organizationName = fields.optBoolean("organizationName", true);
+        this.notes = fields.optBoolean("notes", true);
         this.phoneNumbers = fields.optBoolean("phoneNumbers");
         this.emails = fields.optBoolean("emails");
     }
