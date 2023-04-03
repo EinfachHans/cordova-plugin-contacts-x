@@ -60,6 +60,11 @@ declare module 'cordova-plugin-contacts-x' {
     organizationName?: string;
 
     /**
+     * note of the contact
+     */
+    note?: string;
+
+    /**
      * unformatted phone-numbers of the contact
      */
     phoneNumbers?: ContactXPhoneNumber[];
