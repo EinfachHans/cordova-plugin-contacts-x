@@ -395,11 +395,11 @@ import PhoneNumberKit
         }
         return ContactsX._PhoneNumberKitInstance!;
     }
-}
 
-enum ErrorCodes:NSNumber {
-    case UnsupportedAction = 1
-    case WrongJsonObject = 2
-    case PermissionDenied = 3
-    case UnknownError = 10
+    enum ErrorCodes:NSNumber {
+        case UnsupportedAction = 1
+        case WrongJsonObject = 2
+        case PermissionDenied = 3
+        case UnknownError = 10
+    }
 }
