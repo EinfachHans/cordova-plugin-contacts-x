@@ -214,7 +214,7 @@ import PhoneNumberKit
                 var newMails: [CNLabeledValue<NSString>] = [];
                 outer: for newMail in contact.emails! {
                     for mail in editContact.emailAddresses {
-                        if(mail.identifier == newMail.id!) {
+                        if(newMail.id != nil && mail.identifier == newMail.id!) {
                             newMails.append(mail.settingLabel(ContactsX.mapStringToLabel(string: newMail.type), value: newMail.value as NSString));
                             continue outer;
                         }
