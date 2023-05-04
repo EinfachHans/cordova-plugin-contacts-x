@@ -1,3 +1,10 @@
+### [2.1.2](https://github.com/EinfachHans/cordova-plugin-contacts-x/compare/V2.1.1...V2.1.2) (2023-05-04)
+
+
+### Bug Fixes
+
+* **ios:** declare error codes enum within main class ([1d83826](https://github.com/EinfachHans/cordova-plugin-contacts-x/commit/1d83826753edd6b81009012699631eb4aaeb0cd3))
+
 ### [2.1.1](https://github.com/EinfachHans/cordova-plugin-contacts-x/compare/V2.1.0...V2.1.1) (2022-03-13)
 
 

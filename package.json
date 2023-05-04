@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-contacts-x",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Cordova Plugins for managing contacts",
   "cordova": {
     "id": "cordova-plugin-contacts-x",
