@@ -214,7 +214,7 @@ import PhoneNumberKit
                 var newMails: [CNLabeledValue<NSString>] = [];
                 outer: for newMail in contact.emails! {
                     for mail in editContact.emailAddresses {
-                        if(mail.identifier == newMail.id!) {
+                        if(newMail.id != nil && mail.identifier == newMail.id!) {
                             newMails.append(mail.settingLabel(ContactsX.mapStringToLabel(string: newMail.type), value: newMail.value as NSString));
                             continue outer;
                         }
@@ -395,11 +395,11 @@ import PhoneNumberKit
         }
         return ContactsX._PhoneNumberKitInstance!;
     }
-}
 
-enum ErrorCodes:NSNumber {
-    case UnsupportedAction = 1
-    case WrongJsonObject = 2
-    case PermissionDenied = 3
-    case UnknownError = 10
+    enum ErrorCodes:NSNumber {
+        case UnsupportedAction = 1
+        case WrongJsonObject = 2
+        case PermissionDenied = 3
+        case UnknownError = 10
+    }
 }

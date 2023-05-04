@@ -18,7 +18,7 @@ repositories {
 
 
 dependencies {
-    compile 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
 }
 
 android {
